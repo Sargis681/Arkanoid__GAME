@@ -1,0 +1,109 @@
+body {
+  background-color: black;
+  background-position: center;
+  background-size: cover;
+}
+
+canvas {
+  border: 3px dashed rgb(128, 23, 0);
+  background-size: cover;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 50px auto;
+  text-align: center;
+
+  &__name {
+    border-radius: 10px;
+    width: 200px;
+    color: wheat;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    animation: mymove 5s infinite;
+  }
+
+  &__start {
+    border: none;
+    font-size: 18px;
+    color: red;
+    background-color: black;
+    border-radius: 50% 0% 0% 50%;
+    cursor: pointer;
+    font-weight: bolder;
+
+    &:hover {
+      background-color: blue;
+      font-weight: bolder;
+    }
+  }
+
+  &__lives {
+    color: rgb(233, 204, 204);
+  }
+
+  &__heart img {
+    width: 20px;
+  }
+
+  &__heart {
+    width: 800px;
+    margin: 0 auto;
+    background-color: green;
+    padding: 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    span {
+      color: white;
+      font-size: 18px;
+    }
+  }
+
+  &__restart {
+    margin: 0 auto;
+    position: absolute;
+    top: 20%;
+    left: 33%;
+    z-index: 10000;
+    font-size: 30px;
+    font-family: serif;
+    color: blue;
+  }
+
+  &__button {
+    padding: 10px;
+    border: none;
+    background-color: rgb(177, 175, 175);
+    color: rgb(22, 15, 3);
+    font-weight: bolder;
+    margin-top: 4px;
+    border-radius: 10px;
+
+    &:hover {
+      background-color: green;
+      cursor: pointer;
+    }
+  }
+}
+
+
+
+@keyframes mymove {
+    0% {
+       transform: translateX(0%);
+       background-color: aliceblue;
+     }
+   
+     50% {
+       transform: translateX(50%);
+       background-color: red;
+     }
+     100%{
+       transform: translateX(100%);
+       background-color: green;
+     }
+  
+  }
