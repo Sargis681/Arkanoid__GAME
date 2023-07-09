@@ -95,25 +95,22 @@ function allDraw() {
 
 function draw() {
   container__heart.innerHTML = "";
-  container__lives.innerHTML = `You have ${heart} attempts / ${roundsPlayed}`;
-
+  
   context.clearRect(0, 0, canvas.width, canvas.height);
   allDraw();
   console.log("ayo");
-
+  
   animationId = requestAnimationFrame(draw);
-  for (let index = 0; index < roundsPlayed; index++) {
-    container__heart.innerHTML += `<img src="./images/heart.png" alt="">`;
-  }
 
+  
   let brickLength = document.createElement("span");
   brickLength.innerHTML = `The number of available blocks: ${bricks.length - 1
     }`;
-  container__heart.append(brickLength);
-
+    container__heart.append(brickLength);
+    
   if (ball.y + ball.radius >= canvas.height) {
     roundsPlayed--;
-
+    
     resetBall();
     if (roundsPlayed === 1) {
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -133,6 +130,10 @@ function draw() {
       gameOver();
     }
   }
+  for (let index = 0; index < roundsPlayed; index++) {
+    container__heart.innerHTML += `<img src="./images/heart.png" alt="">`;
+  }
+  container__lives.innerHTML = `You have ${heart} attempts / ${roundsPlayed}`;
 }
 
 function collideRect(circle, rect) {
@@ -211,7 +212,6 @@ function keydown(event) {
     if (paddle.x - 5 >= 0) {
 
       leftPressed = true;
-      // ball.x-=5
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
       drawBall()
