@@ -95,22 +95,22 @@ function allDraw() {
 
 function draw() {
   container__heart.innerHTML = "";
-  
+
   context.clearRect(0, 0, canvas.width, canvas.height);
   allDraw();
   console.log("ayo");
-  
+
   animationId = requestAnimationFrame(draw);
 
-  
   let brickLength = document.createElement("span");
-  brickLength.innerHTML = `The number of available blocks: ${bricks.length - 1
-    }`;
-    container__heart.append(brickLength);
-    
+  brickLength.innerHTML = `The number of available blocks: ${
+    bricks.length - 1
+  }`;
+  container__heart.append(brickLength);
+
   if (ball.y + ball.radius >= canvas.height) {
     roundsPlayed--;
-    
+
     resetBall();
     if (roundsPlayed === 1) {
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -210,30 +210,28 @@ let rightPressed = false;
 function keydown(event) {
   if (event.key === "ArrowLeft") {
     if (paddle.x - 5 >= 0) {
-
       leftPressed = true;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-      drawBall()
-      drawBricks()
+      drawBall();
+      drawBricks();
       if (ball.dx === 0 && ball.dy === 0) {
-        ball.x -= 5
-        paddle.x -= 5
+        ball.x -= 5;
+        paddle.x -= 5;
       }
 
       console.log("every");
     }
-
   } else if (event.key === "ArrowRight") {
     if (paddle.x <= canvas.width - paddle.width - 5) {
       rightPressed = true;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-      drawBall()
-      drawBricks()
+      drawBall();
+      drawBricks();
       if (ball.dx === 0 && ball.dy === 0) {
-        ball.x += 5
-        paddle.x += 5
+        ball.x += 5;
+        paddle.x += 5;
       }
     }
   }
@@ -242,7 +240,6 @@ function keydown(event) {
 function keyup(event) {
   if (event.key === "ArrowLeft") {
     leftPressed = false;
-
   } else if (event.key === "ArrowRight") {
     rightPressed = false;
   }
@@ -255,7 +252,6 @@ function movePaddle() {
     if (!gameStarted) {
       ball.x -= 5;
     }
-
   } else if (rightPressed && paddle.x <= canvas.width - paddle.width - 5) {
     paddle.x += 5;
     if (!gameStarted) {
@@ -293,18 +289,22 @@ function generateBricks() {
 generateBricks();
 
 function gameOver() {
-  heart = false
-
+  heart = false;
   container__restart.innerHTML = "You lost the game. It will start again soon";
-
-  setTimeout(() => {
-    document.location.reload();
-  }, 3000);
 }
 
 let container__button = document.querySelector(".container__button");
 container__button.addEventListener("click", () => {
-  document.location.reload();
+  console.log("harutik");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawPaddle();
+  heart = 3;
+  roundsPlayed = 3;
+  drawBall();
+  generateBricks();
+  drawBricks();
+  // cot__go = false;
+  // container__goGame.remove();
 });
 
 let container = contanier__startid.addEventListener("click", () => {
