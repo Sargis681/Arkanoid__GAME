@@ -4,17 +4,19 @@ const container__lives = document.querySelector(".container__lives");
 const container__restart = document.querySelector(".container__restart");
 const container__heart = document.querySelector(".container__heart");
 let container__goGame = document.querySelector(".container__goGame");
-let contanier__startid = document.querySelector(".contanier__startid");
+let container__started = document.querySelector(".container__started");
 let start = document.querySelector(".start");
+let animationId;
 let heart = 3;
-const bricks = [];
+let bricks = [];
 let cot__go = true;
 let gameStarted = false;
 let oneStart = true;
+let roundsPlayed = 3;
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
+document.addEventListener("keydown", startPaddle);
 
-let roundsPlayed = 3;
 const paddle = {
   x: 300,
   y: 470,
@@ -33,20 +35,16 @@ const ball = {
   color: "blue",
 };
 
-let animationId;
 container__heart.innerHTML = `press to tab`;
-document.addEventListener("keydown", startPaddle);
 
 function startPaddle(event) {
   if (
     event.keyCode === 32 &&
     ball.dx === 0 &&
     ball.dy === 0 &&
-    cot__go === false&& 
-    bricks.length>=0
+    cot__go === false &&
+    bricks.length >= 0
   ) {
-    console.log(ball.y);
-    console.log(container__goGame);
     if (roundsPlayed !== 0 && container__goGame) {
       requestAnimationFrame(draw);
       const randomDirection = Math.random() >= 0.5 ? 1 : -1;
@@ -89,25 +87,19 @@ function allDraw() {
   drawBricks();
   updateBallPosition();
   movePaddle();
-
   oneStart = false;
   cancelAnimationFrame(animationId);
 }
 
-// brickLength.innerHTML = ""
 function draw() {
   container__heart.innerHTML = "";
-  
+
   let brickLength = document.createElement("span");
-  brickLength.innerHTML = `The number of available blocks: ${
-    bricks.length - 1
-  }`;
+  brickLength.innerHTML = `The number of available blocks: ${bricks.length - 1
+    }`;
   context.clearRect(0, 0, canvas.width, canvas.height);
   allDraw();
-  console.log("ayo");
-
   animationId = requestAnimationFrame(draw);
-
   container__heart.append(brickLength);
 
   if (ball.y + ball.radius >= canvas.height) {
@@ -221,8 +213,6 @@ function keydown(event) {
         ball.x -= 5;
         paddle.x -= 5;
       }
-
-      console.log("every");
     }
   } else if (event.key === "ArrowRight") {
     if (paddle.x <= canvas.width - paddle.width - 5) {
@@ -297,23 +287,18 @@ function gameOver() {
 
 let container__button = document.querySelector(".container__button");
 container__button.addEventListener("click", () => {
-  console.log("harutik");
   context.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   heart = 3;
   roundsPlayed = 3;
   drawBall();
-  bricks.length=0
+  bricks.length = 0
   generateBricks();
   drawBricks();
-  container__restart.innerHTML =""
-
-  // bricks.length=0
-  // cot__go = false;
-  // container__goGame.remove();
+  container__restart.innerHTML = ""
 });
 
-let container = contanier__startid.addEventListener("click", () => {
+let container = container__started.addEventListener("click", () => {
   drawPaddle();
   drawBall();
   drawBricks();
