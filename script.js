@@ -3,18 +3,22 @@ const context = canvas.getContext("2d");
 const container__lives = document.querySelector(".container__lives");
 const container__restart = document.querySelector(".container__restart");
 const container__heart = document.querySelector(".container__heart");
-let container__goGame = document.querySelector(".container__goGame");
-let contanier__startid = document.querySelector(".contanier__startid");
-let start = document.querySelector(".start");
+const container__goGame = document.querySelector(".container__goGame");
+const container__started = document.querySelector(".container__started");
+const start = document.querySelector(".start");
+
+let animationId;
 let heart = 3;
-const bricks = [];
-let cot__go = true;
+let bricks = [];
 let gameStarted = false;
 let oneStart = true;
+let roundsPlayed = 3;
+let you__win = false;
+
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
+document.addEventListener("keydown", startPaddle);
 
-let roundsPlayed = 3;
 const paddle = {
   x: 300,
   y: 470,
@@ -33,19 +37,15 @@ const ball = {
   color: "blue",
 };
 
-let animationId;
-container__heart.innerHTML = `press to tab`;
-document.addEventListener("keydown", startPaddle);
+container__heart.innerHTML = `Press to Probel`;
 
 function startPaddle(event) {
   if (
     event.keyCode === 32 &&
     ball.dx === 0 &&
     ball.dy === 0 &&
-    cot__go === false
+    bricks.length >= 0
   ) {
-    console.log(ball.y);
-    console.log(container__goGame);
     if (roundsPlayed !== 0 && container__goGame) {
       requestAnimationFrame(draw);
       const randomDirection = Math.random() >= 0.5 ? 1 : -1;
@@ -74,13 +74,6 @@ function drawBricks() {
     context.fillStyle = brick.color;
     context.fillRect(brick.x, brick.y, brick.width, brick.height);
   });
-
-  if (bricks.length === 0) {
-    container__restart.innerHTML = `
-    <div class="container__winstart">You win</div>`;
-    cancelAnimationFrame(animationId);
-    container__lives.remove();
-  }
 }
 function allDraw() {
   drawPaddle();
@@ -88,30 +81,38 @@ function allDraw() {
   drawBricks();
   updateBallPosition();
   movePaddle();
-
   oneStart = false;
   cancelAnimationFrame(animationId);
 }
 
 function draw() {
   container__heart.innerHTML = "";
-  
+
+  let brickLength = document.createElement("span");
+  brickLength.innerHTML = `The number of available blocks: ${
+    bricks.length - 1
+  }`;
   context.clearRect(0, 0, canvas.width, canvas.height);
   allDraw();
-  console.log("ayo");
-  
   animationId = requestAnimationFrame(draw);
+  container__heart.append(brickLength);
+  if (bricks.length === 0) {
+    container__restart.innerHTML = `
+    <div class="container__winstart">You win</div>`;
+    gameStarted = false;
 
-  
-  let brickLength = document.createElement("span");
-  brickLength.innerHTML = `The number of available blocks: ${bricks.length - 1
-    }`;
-    container__heart.append(brickLength);
-    
+    you__win = -you__win;
+    cancelAnimationFrame(animationId);
+  }
   if (ball.y + ball.radius >= canvas.height) {
     roundsPlayed--;
-    
+
     resetBall();
+    if (roundsPlayed < 1) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      allDraw();
+      cancelAnimationFrame(animationId);
+    }
     if (roundsPlayed === 1) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       allDraw();
@@ -121,6 +122,9 @@ function draw() {
       context.clearRect(0, 0, canvas.width, canvas.height);
       allDraw();
       resetBall();
+      cancelAnimationFrame(animationId);
+    }
+    if (bricks.length < 0) {
       cancelAnimationFrame(animationId);
     }
     if (roundsPlayed === 0 && bricks.length !== 0) {
@@ -210,30 +214,26 @@ let rightPressed = false;
 function keydown(event) {
   if (event.key === "ArrowLeft") {
     if (paddle.x - 5 >= 0) {
-
       leftPressed = true;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-      drawBall()
-      drawBricks()
+      drawBall();
+      drawBricks();
       if (ball.dx === 0 && ball.dy === 0) {
-        ball.x -= 5
-        paddle.x -= 5
+        ball.x -= 5;
+        paddle.x -= 5;
       }
-
-      console.log("every");
     }
-
   } else if (event.key === "ArrowRight") {
     if (paddle.x <= canvas.width - paddle.width - 5) {
       rightPressed = true;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-      drawBall()
-      drawBricks()
+      drawBall();
+      drawBricks();
       if (ball.dx === 0 && ball.dy === 0) {
-        ball.x += 5
-        paddle.x += 5
+        ball.x += 5;
+        paddle.x += 5;
       }
     }
   }
@@ -242,7 +242,6 @@ function keydown(event) {
 function keyup(event) {
   if (event.key === "ArrowLeft") {
     leftPressed = false;
-
   } else if (event.key === "ArrowRight") {
     rightPressed = false;
   }
@@ -255,7 +254,6 @@ function movePaddle() {
     if (!gameStarted) {
       ball.x -= 5;
     }
-
   } else if (rightPressed && paddle.x <= canvas.width - paddle.width - 5) {
     paddle.x += 5;
     if (!gameStarted) {
@@ -293,24 +291,30 @@ function generateBricks() {
 generateBricks();
 
 function gameOver() {
-  heart = false
-
-  container__restart.innerHTML = "You lost the game. It will start again soon";
-
-  setTimeout(() => {
-    document.location.reload();
-  }, 3000);
+  heart = false;
+  container__restart.innerHTML = "you lost click start again to play again";
 }
 
 let container__button = document.querySelector(".container__button");
 container__button.addEventListener("click", () => {
-  document.location.reload();
+  container__goGame.style.display = "block";
+  container__heart.innerHTML = "";
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  drawPaddle();
+  heart = 3;
+  roundsPlayed = 3;
+  drawBall();
+  bricks.length = 0;
+  generateBricks();
+  drawBricks();
+  container__restart.innerHTML = "";
 });
 
-let container = contanier__startid.addEventListener("click", () => {
+let container = container__started.addEventListener("click", () => {
+  resetBall();
   drawPaddle();
   drawBall();
   drawBricks();
-  cot__go = false;
-  container__goGame.remove();
+  container__goGame.style.display = "none";
 });
