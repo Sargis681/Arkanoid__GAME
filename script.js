@@ -3,10 +3,10 @@ const context = canvas.getContext("2d");
 const container__lives = document.querySelector(".container__lives");
 const container__restart = document.querySelector(".container__restart");
 const container__heart = document.querySelector(".container__heart");
+const container__goGame = document.querySelector(".container__goGame");
+const container__started = document.querySelector(".container__started");
+const start = document.querySelector(".start");
 
-let container__goGame = document.querySelector(".container__goGame");
-let container__started = document.querySelector(".container__started");
-let start = document.querySelector(".start");
 let animationId;
 let heart = 3;
 let bricks = [];
@@ -37,7 +37,7 @@ const ball = {
   color: "blue",
 };
 
-container__heart.innerHTML = `press to tab`;
+container__heart.innerHTML = `Press to Probel`;
 
 function startPaddle(event) {
   if (
@@ -45,7 +45,6 @@ function startPaddle(event) {
     ball.dx === 0 &&
     ball.dy === 0 &&
     bricks.length >= 0
-    // you__win === false
   ) {
     if (roundsPlayed !== 0 && container__goGame) {
       requestAnimationFrame(draw);
@@ -104,8 +103,6 @@ function draw() {
 
     you__win = -you__win;
     cancelAnimationFrame(animationId);
-
-    // container__lives.remove();
   }
   if (ball.y + ball.radius >= canvas.height) {
     roundsPlayed--;
@@ -320,5 +317,4 @@ let container = container__started.addEventListener("click", () => {
   drawBall();
   drawBricks();
   container__goGame.style.display = "none";
-  // console.log(container__goGame.style.display);
 });
