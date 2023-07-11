@@ -3,16 +3,17 @@ const context = canvas.getContext("2d");
 const container__lives = document.querySelector(".container__lives");
 const container__restart = document.querySelector(".container__restart");
 const container__heart = document.querySelector(".container__heart");
+
 let container__goGame = document.querySelector(".container__goGame");
 let container__started = document.querySelector(".container__started");
 let start = document.querySelector(".start");
 let animationId;
 let heart = 3;
 let bricks = [];
-let cot__go = true;
 let gameStarted = false;
 let oneStart = true;
 let roundsPlayed = 3;
+
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
 document.addEventListener("keydown", startPaddle);
@@ -42,7 +43,6 @@ function startPaddle(event) {
     event.keyCode === 32 &&
     ball.dx === 0 &&
     ball.dy === 0 &&
-    cot__go === false &&
     bricks.length >= 0
   ) {
     if (roundsPlayed !== 0 && container__goGame) {
@@ -310,6 +310,5 @@ let container = container__started.addEventListener("click", () => {
   drawPaddle();
   drawBall();
   drawBricks();
-  cot__go = false;
   container__goGame.style.display = "none";
 });
