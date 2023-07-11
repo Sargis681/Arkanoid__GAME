@@ -95,8 +95,9 @@ function draw() {
   container__heart.innerHTML = "";
 
   let brickLength = document.createElement("span");
-  brickLength.innerHTML = `The number of available blocks: ${bricks.length - 1
-    }`;
+  brickLength.innerHTML = `The number of available blocks: ${
+    bricks.length - 1
+  }`;
   context.clearRect(0, 0, canvas.width, canvas.height);
   allDraw();
   animationId = requestAnimationFrame(draw);
@@ -106,6 +107,11 @@ function draw() {
     roundsPlayed--;
 
     resetBall();
+    if (roundsPlayed < 1) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      allDraw();
+      cancelAnimationFrame(animationId);
+    }
     if (roundsPlayed === 1) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       allDraw();
@@ -287,15 +293,17 @@ function gameOver() {
 
 let container__button = document.querySelector(".container__button");
 container__button.addEventListener("click", () => {
+  container__goGame.style.display = "block";
+
   context.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
   heart = 3;
   roundsPlayed = 3;
   drawBall();
-  bricks.length = 0
+  bricks.length = 0;
   generateBricks();
   drawBricks();
-  container__restart.innerHTML = ""
+  container__restart.innerHTML = "";
 });
 
 let container = container__started.addEventListener("click", () => {
@@ -303,5 +311,5 @@ let container = container__started.addEventListener("click", () => {
   drawBall();
   drawBricks();
   cot__go = false;
-  container__goGame.remove();
+  container__goGame.style.display = "none";
 });
