@@ -13,6 +13,7 @@ let bricks = [];
 let gameStarted = false;
 let oneStart = true;
 let roundsPlayed = 3;
+let you__win = false;
 
 document.addEventListener("keydown", keydown);
 document.addEventListener("keyup", keyup);
@@ -44,6 +45,7 @@ function startPaddle(event) {
     ball.dx === 0 &&
     ball.dy === 0 &&
     bricks.length >= 0
+    // you__win === false
   ) {
     if (roundsPlayed !== 0 && container__goGame) {
       requestAnimationFrame(draw);
@@ -73,13 +75,6 @@ function drawBricks() {
     context.fillStyle = brick.color;
     context.fillRect(brick.x, brick.y, brick.width, brick.height);
   });
-
-  if (bricks.length === 0) {
-    container__restart.innerHTML = `
-    <div class="container__winstart">You win</div>`;
-    cancelAnimationFrame(animationId);
-    container__lives.remove();
-  }
 }
 function allDraw() {
   drawPaddle();
@@ -102,7 +97,16 @@ function draw() {
   allDraw();
   animationId = requestAnimationFrame(draw);
   container__heart.append(brickLength);
+  if (bricks.length === 0) {
+    container__restart.innerHTML = `
+    <div class="container__winstart">You win</div>`;
+    gameStarted = false;
 
+    you__win = -you__win;
+    cancelAnimationFrame(animationId);
+
+    // container__lives.remove();
+  }
   if (ball.y + ball.radius >= canvas.height) {
     roundsPlayed--;
 
@@ -121,6 +125,9 @@ function draw() {
       context.clearRect(0, 0, canvas.width, canvas.height);
       allDraw();
       resetBall();
+      cancelAnimationFrame(animationId);
+    }
+    if (bricks.length < 0) {
       cancelAnimationFrame(animationId);
     }
     if (roundsPlayed === 0 && bricks.length !== 0) {
@@ -294,6 +301,7 @@ function gameOver() {
 let container__button = document.querySelector(".container__button");
 container__button.addEventListener("click", () => {
   container__goGame.style.display = "block";
+  container__heart.innerHTML = "";
 
   context.clearRect(0, 0, canvas.width, canvas.height);
   drawPaddle();
@@ -307,8 +315,10 @@ container__button.addEventListener("click", () => {
 });
 
 let container = container__started.addEventListener("click", () => {
+  resetBall();
   drawPaddle();
   drawBall();
   drawBricks();
   container__goGame.style.display = "none";
+  // console.log(container__goGame.style.display);
 });
